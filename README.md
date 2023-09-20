@@ -2,6 +2,10 @@
 
 A tic-tac-toe game powered by [raylib](https://www.raylib.com/), compiling for both desktop and web using emscripten.
 
+<p align="center">
+  <img src=".github/assets/tic-tac-toe.png?raw=true" alt="Tic Tac Toe Screenshot"/>
+</p>
+
 ## Motivation
 
 Practice my C programming skills.
