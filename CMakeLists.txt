@@ -21,5 +21,11 @@ if (NOT raylib_FOUND)  # If there's issue finding raylib
 endif()
 
 add_executable(raylib_tic_tac_toe main.c)
+
+# Copy resources directory to the binary directory after building
+add_custom_command(TARGET raylib_tic_tac_toe POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${CMAKE_SOURCE_DIR}/resources $<TARGET_FILE_DIR:raylib_tic_tac_toe>/resources)
+
 # Link raylib to your project
 target_link_libraries(raylib_tic_tac_toe PRIVATE raylib)
