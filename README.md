@@ -3,7 +3,7 @@
 A tic-tac-toe game powered by [raylib](https://www.raylib.com/), compiling for both desktop and web using emscripten.
 
 <p align="center">
-  <img src=".github/assets/tic-tac-toe.png?raw=true" alt="Tic Tac Toe Screenshot"/>
+  <img src=".github/assets/tic-tac-toe.png?raw=true" alt="Tic Tac Toe Screenshot" width="50%" height="50%"/>
 </p>
 
 ## Motivation
