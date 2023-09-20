@@ -40,6 +40,9 @@ Practice my C programming skills.
    ```bash
    just build-web
    ```
+   
+   Alternatively, you can build a debug version for the web :
+   ```bash
 
 4. **Clean**: To remove the build and out directories:
    ```bash
@@ -88,7 +91,7 @@ If you don't want to use `just`, you can also follow these manual steps:
 
 4. Run emscripten's CMake:
    ```bash
-   emcmake cmake .. -DPLATFORM=Web -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXE_LINKER_FLAGS="-s USE_GLFW=3" -DCMAKE_EXECUTABLE_SUFFIX=".html"
+   emcmake cmake .. -DPLATFORM=Web -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXE_LINKER_FLAGS="-s USE_GLFW=3" -DCMAKE_EXECUTABLE_SUFFIX=".html" -DWEB_SHELL=minshell.html
    ```
 
 5. Compile the project:
