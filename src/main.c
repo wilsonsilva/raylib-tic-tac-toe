@@ -87,9 +87,32 @@ void InitGame(void) {
     }
 }
 
-void UpdateGame(void) {
-    updateAnimations(moves, moveCount);
+bool isMoveAvailable() {
+    for (int x = 0; x < 3; x++) {
+        for (int y = 0; y < 3; y++) {
+            if (board[x][y] == EMPTY) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
 
+void AIMove() {
+    int aiMoveX, aiMoveY;
+
+    do {
+        aiMoveX = GetRandomValue(0, 2);
+        aiMoveY = GetRandomValue(0, 2);
+    } while (board[aiMoveX][aiMoveY] != EMPTY);
+
+    board[aiMoveX][aiMoveY] = CROSS;
+    Move aiMove = { CROSS, aiMoveX, aiMoveY };
+    initializeMoveAnimation(&aiMove);
+    moves[moveCount++] = aiMove;
+}
+
+void UpdateGame(void) {
     if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
         Vector2 mousePos = GetMousePosition();
 
@@ -98,17 +121,20 @@ void UpdateGame(void) {
 
         if (boardX >= 0 && boardX < 3 && boardY >= 0 && boardY < 3) {
             if (board[boardX][boardY] == EMPTY) {
-                // Place shape according to the current turn
-                int shape = (currentTurn == PLAYER_CROSS) ? CROSS : CIRCLE;
-                Move newMove = { shape, boardX, boardY };
-                initializeMoveAnimation(&newMove);
-                moves[moveCount++] = newMove;
+                board[boardX][boardY] = CIRCLE;
+                Move playerMove = { CIRCLE, boardX, boardY };
+                initializeMoveAnimation(&playerMove);
+                moves[moveCount++] = playerMove;
 
-                // Switch turn
-                currentTurn = (currentTurn == PLAYER_CROSS) ? PLAYER_CIRCLE : PLAYER_CROSS;
+                // Make the AI move after the player move, if there's space available
+                if (isMoveAvailable()) {
+                    AIMove();
+                }
             }
         }
     }
+
+    updateAnimations(moves, moveCount);
 }
 
 // Draw game (one frame)
