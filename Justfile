@@ -18,8 +18,6 @@ clean:
 
 build-web-with-config config:
 	#!/usr/bin/env bash
-	sudo emsdk activate latest
-	source "/usr/lib/emsdk/emsdk_env.sh"
 	mkdir -p build-web
 
 	# Ensure resources folder is copied
