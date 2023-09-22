@@ -15,13 +15,6 @@
 #define CROSS 1
 #define CIRCLE 2
 
-typedef enum {
-    PLAYER_CROSS,
-    PLAYER_CIRCLE
-} PlayerTurn;
-
-PlayerTurn currentTurn = PLAYER_CROSS; // Start with CROSS's turn by default
-
 Move moves[9];
 int moveCount = 0;
 
