@@ -15,6 +15,13 @@
 #define CROSS 1
 #define CIRCLE 2
 
+typedef enum {
+    PLAYER_CROSS,
+    PLAYER_CIRCLE
+} PlayerTurn;
+
+PlayerTurn currentTurn = PLAYER_CROSS; // Start with CROSS's turn by default
+
 Move moves[9];
 int moveCount = 0;
 
@@ -91,13 +98,14 @@ void UpdateGame(void) {
 
         if (boardX >= 0 && boardX < 3 && boardY >= 0 && boardY < 3) {
             if (board[boardX][boardY] == EMPTY) {
-                Move newMove = { CROSS, boardX, boardY };
+                // Place shape according to the current turn
+                int shape = (currentTurn == PLAYER_CROSS) ? CROSS : CIRCLE;
+                Move newMove = { shape, boardX, boardY };
                 initializeMoveAnimation(&newMove);
                 moves[moveCount++] = newMove;
-                board[boardX][boardY] = CROSS;
 
-                // Reset the animation when a move is made
-                resetAnimation(&moves[moveCount - 1]);
+                // Switch turn
+                currentTurn = (currentTurn == PLAYER_CROSS) ? PLAYER_CIRCLE : PLAYER_CROSS;
             }
         }
     }
