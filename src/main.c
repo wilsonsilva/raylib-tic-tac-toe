@@ -1,5 +1,5 @@
 #include "raylib.h"
-#include "stdio.h"
+#include "animations.h"
 
 #if defined(PLATFORM_WEB)
     #include <emscripten/emscripten.h>
@@ -39,10 +39,10 @@ void drawBoard() {
 }
 
 void drawMove(Texture2D shape, int boardX, int boardY) {
-    int x = (boardX + 1) * 80;
-    int y = HUD_GAP + (boardY + 1) * 80;
+    int x = (boardX + 1) * 80 + 40;
+    int y = HUD_GAP + (boardY + 1) * 80 + 40;
 
-    DrawTexture(shape, x, y, WHITE);
+    DrawTextureEx(shape, (Vector2){x - shape.width * currentScale / 2, y - shape.height * currentScale / 2}, 0.0f, currentScale, WHITE);
 }
 
 void InitGame(void) {
@@ -54,7 +54,7 @@ void InitGame(void) {
 }
 
 void UpdateGame(void) {
-
+    updateAnimations();
 }
 
 // Draw game (one frame)
