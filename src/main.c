@@ -1,5 +1,6 @@
 #include "raylib.h"
 #include "animations.h"
+#include <stdio.h>
 
 #if defined(PLATFORM_WEB)
     #include <emscripten/emscripten.h>
@@ -10,6 +11,14 @@
 #define DARK_GREY  CLITERAL(Color){ 147, 143, 172, 255 }
 #define LIGHT_GREY CLITERAL(Color){ 223, 222, 230, 255 }
 #define LIGHT_RED  CLITERAL(Color){ 249,  35, 100, 255 }
+#define EMPTY 0
+#define CROSS 1
+#define CIRCLE 2
+
+Move moves[9];
+int moveCount = 0;
+
+int board[3][3];
 
 static const int screenWidth = 400;
 static const int screenHeight = 450;
@@ -38,11 +47,23 @@ void drawBoard() {
     DrawRectangle(80, 240 + HUD_GAP, 240, 2, LIGHT_GREY);
 }
 
-void drawMove(Texture2D shape, int boardX, int boardY) {
+void drawMove(Texture2D shape, int boardX, int boardY, float scale) {
     int x = (boardX + 1) * 80 + 40;
     int y = HUD_GAP + (boardY + 1) * 80 + 40;
 
-    DrawTextureEx(shape, (Vector2){x - shape.width * currentScale / 2, y - shape.height * currentScale / 2}, 0.0f, currentScale, WHITE);
+    DrawTextureEx(shape, (Vector2){x - shape.width * scale / 2, y - shape.height * scale / 2}, 0.0f, scale, WHITE);
+}
+
+void drawMoves() {
+    for (int i = 0; i < moveCount; i++) {
+        Move move = moves[i];
+
+        if (move.type == CROSS) {
+            drawMove(cross, move.x, move.y, move.animation.currentScale);
+        } else if (move.type == CIRCLE) {
+            drawMove(circle, move.x, move.y, move.animation.currentScale);
+        }
+    }
 }
 
 void InitGame(void) {
@@ -51,10 +72,35 @@ void InitGame(void) {
 
     circle = LoadTexture("resources/textures/circle.png");
     cross = LoadTexture("resources/textures/cross.png");
+
+    for (int x = 0; x < 3; x++) {
+        for (int y = 0; y < 3; y++) {
+            board[x][y] = EMPTY;
+        }
+    }
 }
 
 void UpdateGame(void) {
-    updateAnimations();
+    updateAnimations(moves, moveCount);
+
+    if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+        Vector2 mousePos = GetMousePosition();
+
+        int boardX = (mousePos.x - 80) / 80;
+        int boardY = (mousePos.y - 80 - HUD_GAP) / 80;
+
+        if (boardX >= 0 && boardX < 3 && boardY >= 0 && boardY < 3) {
+            if (board[boardX][boardY] == EMPTY) {
+                Move newMove = { CROSS, boardX, boardY };
+                initializeMoveAnimation(&newMove);
+                moves[moveCount++] = newMove;
+                board[boardX][boardY] = CROSS;
+
+                // Reset the animation when a move is made
+                resetAnimation(&moves[moveCount - 1]);
+            }
+        }
+    }
 }
 
 // Draw game (one frame)
@@ -65,14 +111,7 @@ void DrawGame(void) {
 
     drawHud();
     drawBoard();
-
-    drawMove(cross, 0, 0);
-    drawMove(cross, 1, 1);
-    drawMove(cross, 2, 2);
-
-    drawMove(circle, 0, 2);
-    drawMove(circle, 0, 1);
-    drawMove(circle, 1, 2);
+    drawMoves();
 
     EndDrawing();
 }

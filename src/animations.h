@@ -3,16 +3,20 @@
 
 #include "raylib.h"
 
-// Set the initial scale factor and the target scale factor
-extern float currentScale;
-extern float targetScale;
+typedef struct {
+    float currentScale;
+    float currentTime;
+} AnimationState;
 
-// Easing parameters
-extern float duration;
-extern float currentTime;
-extern float startScale;
+typedef struct {
+    int type; // CROSS or CIRCLE
+    int x;
+    int y;
+    AnimationState animation;
+} Move;
 
-// Function to update animations
-void updateAnimations(void);
+extern void initializeMoveAnimation(Move *move);
+extern void updateAnimations(Move moves[], int moveCount);
+extern void resetAnimation(Move *move);
 
-#endif // ANIMATIONS_H
+#endif
